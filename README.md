@@ -1,73 +1,90 @@
-# Welcome to your Lovable project
+# Kanban Task Board
 
-## Project info
+A beautiful, responsive Kanban-style task management board built with React, TypeScript, and Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## ✨ Features
 
-## How can I edit this code?
+- **Multiple Columns**: Organize tasks across "To Do", "In Progress", and "Done" columns
+- **Drag & Drop**: Smooth drag-and-drop functionality using dnd-kit
+- **CRUD Operations**: Create, read, update, and delete tasks
+- **Persistent Storage**: Tasks are saved to localStorage and persist after page reload
+- **Search**: Filter tasks by title or description
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **Smooth Animations**: Elegant transitions and loading states
+- **Empty States**: Helpful messages when columns are empty
 
-There are several ways of editing your application.
+## 🛠 Tech Stack
 
-**Use Lovable**
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first styling
+- **dnd-kit** - Drag and drop functionality
+- **Lucide React** - Icons
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📦 Installation
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd kanban-task-board
 
-**Use your preferred IDE**
+# Install dependencies
+npm install
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🚀 Running Locally
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Ensure you have Node.js 18+ installed
+2. Run `npm install` to install dependencies
+3. Run `npm run dev` to start the development server
+4. Open `http://localhost:8080` in your browser
 
-**Use GitHub Codespaces**
+## 📁 Project Structure
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+src/
+├── components/
+│   ├── Board.tsx        # Main board with DnD context
+│   ├── Column.tsx       # Droppable column component
+│   ├── TaskCard.tsx     # Draggable task card
+│   ├── AddTaskForm.tsx  # Form to add new tasks
+│   └── EditTaskModal.tsx # Modal to edit existing tasks
+├── lib/
+│   └── storage.ts       # localStorage utilities
+├── types/
+│   └── task.ts          # TypeScript interfaces
+└── pages/
+    └── Index.tsx        # Main page
+```
 
-## What technologies are used for this project?
+## 🌐 Deployment (Vercel)
 
-This project is built with:
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Vercel will auto-detect Vite and configure the build
+4. Deploy!
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Or use the Lovable publish feature by clicking "Share" → "Publish".
 
-## How can I deploy this project?
+## ⚠️ Known Issues
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+- Drag preview may flicker briefly on slow devices
+- Search clears when adding a new task (by design)
 
-## Can I connect a custom domain to my Lovable project?
+## 🤖 AI Assistance
 
-Yes, you can!
+This project was built with assistance from Lovable AI, an AI-powered development platform. The AI helped with:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Component architecture and structure
+- TypeScript type definitions
+- Drag-and-drop implementation with dnd-kit
+- Styling with Tailwind CSS
+- localStorage persistence logic
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 📝 License
+
+MIT License - feel free to use this project as you wish!
