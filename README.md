@@ -68,7 +68,7 @@ src/
 3. Vercel will auto-detect Vite and configure the build
 4. Deploy!
 
-Or use the Lovable publish feature by clicking "Share" → "Publish".
+Optional: use the project's publish or share feature if available.
 
 ## ⚠️ Known Issues
 
@@ -77,7 +77,7 @@ Or use the Lovable publish feature by clicking "Share" → "Publish".
 
 ## 🤖 AI Assistance
 
-This project was built with assistance from Lovable AI, an AI-powered development platform. The AI helped with:
+This project was built with assistance from AI tools. The AI helped with:
 
 - Component architecture and structure
 - TypeScript type definitions

@@ -6,7 +6,7 @@
 
 ### Introduction (30 seconds)
 
-"Hi! I'm excited to walk you through the Kanban Task Board I built for Lovable's take-home assignment.
+"Hi! I'm excited to walk you through the Kanban Task Board I built for this take-home assignment.
 
 This is a fully functional task management application with drag-and-drop functionality, persistent storage, and a clean, modern UI."
 
