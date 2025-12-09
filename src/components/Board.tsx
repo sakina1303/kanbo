@@ -267,6 +267,18 @@ export function Board() {
             {activeTask && <TaskCardOverlay task={activeTask} />}
           </DragOverlay>
         </DndContext>
+
+          {/* Full-screen Add Task modal (opened by FAB or 'n' shortcut) */}
+          {showFullAdd && (
+            <FullScreenAddTaskModal
+              status={columnsOrder[0] as TaskStatus}
+              onAdd={(t: Task) => {
+                handleAddTask(t);
+                setShowFullAdd(false);
+              }}
+              onCancel={() => setShowFullAdd(false)}
+            />
+          )}
       </main>
 
       {/* Edit Modal */}
