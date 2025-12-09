@@ -47,7 +47,7 @@ export function AddTaskForm({ status, onAdd, onCancel }: AddTaskFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card border border-border rounded-lg p-4 shadow-card animate-scale-in"
+      className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-all ease-in-out duration-200 animate-scale-in"
     >
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-medium text-foreground">New Task</h3>
@@ -70,10 +70,10 @@ export function AddTaskForm({ status, onAdd, onCancel }: AddTaskFormProps) {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Task title"
             className={cn(
-              'w-full px-3 py-2 text-sm rounded-md border bg-background text-foreground placeholder:text-muted-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-              'transition-colors',
-              error ? 'border-destructive' : 'border-input'
+              'w-full px-3 py-2 text-sm rounded-lg border bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300',
+              'transition-all ease-in-out duration-200',
+              error ? 'border-destructive' : 'border-gray-200 dark:border-neutral-700'
             )}
             autoFocus
             disabled={isSaving}
@@ -90,9 +90,9 @@ export function AddTaskForm({ status, onAdd, onCancel }: AddTaskFormProps) {
           placeholder="Description (optional)"
           rows={2}
           className={cn(
-            'w-full px-3 py-2 text-sm rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground',
-            'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-            'transition-colors resize-none'
+            'w-full px-3 py-2 text-sm rounded-lg border bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500',
+            'focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300',
+            'transition-all ease-in-out duration-200 resize-none border-gray-200 dark:border-neutral-700'
           )}
           disabled={isSaving}
         />

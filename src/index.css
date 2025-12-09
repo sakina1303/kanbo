@@ -111,6 +111,33 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    /* Subtle decorative background to reduce emptiness */
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.92)),
+      radial-gradient(circle at 12% 12%, rgba(99,102,241,0.04), transparent 8%),
+      radial-gradient(circle at 88% 82%, rgba(34,197,94,0.025), transparent 12%);
+    background-blend-mode: overlay, normal, normal;
+  }
+
+  /* Layered background element to ensure the gradient is visible across browsers
+     and sits behind the app content. Keeps pointer-events off so it doesn't block UI. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(99,102,241,0.06), rgba(255,255,255,0.02)),
+                radial-gradient(circle at 10% 12%, rgba(99,102,241,0.045), transparent 10%),
+                radial-gradient(circle at 92% 78%, rgba(34,197,94,0.03), transparent 14%);
+    opacity: 1;
+    mix-blend-mode: normal;
+  }
+
+  /* Ensure the application root renders above the background layer */
+  #root {
+    position: relative;
+    z-index: 1;
   }
 }
 

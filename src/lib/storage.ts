@@ -65,3 +65,31 @@ export function deleteTask(id: string): Task[] {
 export function generateId(): string {
   return `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
+
+/**
+ * Columns ordering persistence
+ */
+const COLUMNS_KEY = 'kanban-columns-order';
+
+export function getColumnsOrder(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const data = localStorage.getItem(COLUMNS_KEY);
+    if (!data) return [];
+    const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed)) return [];
+    return parsed;
+  } catch (error) {
+    console.error('Error reading columns order from storage:', error);
+    return [];
+  }
+}
+
+export function saveColumnsOrder(order: string[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(COLUMNS_KEY, JSON.stringify(order));
+  } catch (error) {
+    console.error('Error saving columns order to storage:', error);
+  }
+}

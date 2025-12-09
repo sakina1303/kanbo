@@ -11,21 +11,29 @@ import {
   useSensors,
   closestCenter,
 } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { Task, TaskStatus, COLUMNS } from '@/types/task';
-import { getTasks, saveTasks } from '@/lib/storage';
+import { getTasks, saveTasks, getColumnsOrder, saveColumnsOrder } from '@/lib/storage';
 import { Column } from './Column';
+import SortableColumn from './SortableColumn';
 import { AddTaskForm } from './AddTaskForm';
+import { AddTaskModal } from './AddTaskModal';
 import { EditTaskModal } from './EditTaskModal';
 import { TaskCardOverlay } from './TaskCard';
+import FullScreenAddTaskModal from './FullScreenAddTaskModal';
 import { Search, LayoutGrid, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ThemeToggle from './ThemeToggle';
 
 export function Board() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [columnsOrder, setColumnsOrder] = useState<string[]>(COLUMNS.map((c) => c.id));
   const [isLoading, setIsLoading] = useState(true);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [addingToColumn, setAddingToColumn] = useState<TaskStatus | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [showFullAdd, setShowFullAdd] = useState(false);
+  const [showQuickCreate, setShowQuickCreate] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Configure drag sensor with activation constraint
@@ -43,6 +51,8 @@ export function Board() {
       await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate loading
       const storedTasks = getTasks();
       setTasks(storedTasks);
+      const storedOrder = getColumnsOrder();
+      if (storedOrder && storedOrder.length) setColumnsOrder(storedOrder);
       setIsLoading(false);
     };
     loadTasks();
@@ -54,6 +64,12 @@ export function Board() {
       saveTasks(tasks);
     }
   }, [tasks, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      saveColumnsOrder(columnsOrder);
+    }
+  }, [columnsOrder, isLoading]);
 
   // Filter tasks by search query
   const filteredTasks = searchQuery
@@ -92,6 +108,28 @@ export function Board() {
     const task = tasks.find((t) => t.id === event.active.id);
     if (task) setActiveTask(task);
   };
+
+  // Keyboard shortcuts: 'n' opens full modal, 'N' (shift) opens quick panel, Escape closes
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'n' && !e.shiftKey && (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA')) {
+        e.preventDefault();
+        setShowFullAdd(true);
+      }
+      if (e.key === 'N' || (e.key === 'n' && e.shiftKey)) {
+        if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          setShowQuickCreate((s) => !s);
+        }
+      }
+      if (e.key === 'Escape') {
+        setShowFullAdd(false);
+        setShowQuickCreate(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Handle drag end - update task status
   const handleDragEnd = (event: DragEndEvent) => {
@@ -142,8 +180,8 @@ export function Board() {
               </div>
             </div>
 
-            {/* Search */}
-            <div className="relative w-full sm:w-72">
+            {/* Search + Theme */}
+            <div className="relative w-full sm:w-72 flex items-center gap-3">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
@@ -157,44 +195,72 @@ export function Board() {
                   'transition-colors'
                 )}
               />
+              <div className="ml-2">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Board */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 overflow-x-auto pb-4">
-            {COLUMNS.map((column) => (
-              <div key={column.id} className="flex flex-col gap-3">
-                <Column
-                  title={column.title}
-                  tasks={getTasksByStatus(column.id)}
-                  status={column.id}
-                  onEdit={setEditingTask}
-                  onDelete={handleDeleteTask}
-                  onAddClick={() => setAddingToColumn(column.id)}
-                />
-                
-                {/* Add task form for this column */}
-                {addingToColumn === column.id && (
-                  <div className="w-full md:w-80 px-3">
-                    <AddTaskForm
-                      status={column.id}
-                      onAdd={handleAddTask}
-                      onCancel={() => setAddingToColumn(null)}
-                    />
+          <SortableContext items={columnsOrder} strategy={horizontalListSortingStrategy}>
+            <div className="flex flex-row md:flex-row gap-6 w-full overflow-x-auto pb-8 py-2 items-start">
+              {columnsOrder.map((colId) => {
+                const column = COLUMNS.find((c) => c.id === colId)!;
+                return (
+                  <SortableColumn key={column.id} id={column.id}>
+                    <div className="min-w-[280px]">
+                      <Column
+                        title={column.title}
+                        tasks={getTasksByStatus(column.id)}
+                        status={column.id}
+                        onEdit={setEditingTask}
+                        onDelete={handleDeleteTask}
+                        onAddClick={() => setAddingToColumn(column.id)}
+                      />
+
+                      {/* Add Task modal */}
+                      {addingToColumn === column.id && (
+                        <AddTaskModal
+                          status={column.id}
+                          onAdd={handleAddTask}
+                          onCancel={() => setAddingToColumn(null)}
+                        />
+                      )}
+                    </div>
+                  </SortableColumn>
+                );
+              })}
+              {/* Floating Add Task button (quick access) */}
+              <div className="flex items-start relative">
+                <button
+                  onClick={() => setShowFullAdd(true)}
+                  className="ml-2 h-10 w-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-2xl transition-transform transform hover:-translate-y-0.5"
+                  title="Add task"
+                  aria-label="Add task (n)"
+                >
+                  <span className="text-lg font-bold">+</span>
+                </button>
+
+                {/* Quick create inline panel */}
+                {showQuickCreate && (
+                  <div className="absolute left-0 top-12 w-80 z-40">
+                    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-3 shadow-lg">
+                      <AddTaskForm status={columnsOrder[0] as TaskStatus} onAdd={(t) => { handleAddTask(t); setShowQuickCreate(false); }} onCancel={() => setShowQuickCreate(false)} />
+                    </div>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+            </div>
+          </SortableContext>
 
           {/* Drag Overlay */}
           <DragOverlay>

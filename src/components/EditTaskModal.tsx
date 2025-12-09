@@ -48,12 +48,12 @@ export function EditTaskModal({ task, onSave, onCancel }: EditTaskModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-foreground/20 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/10 dark:bg-neutral-900/40 backdrop-blur-sm animate-fade-in"
         onClick={onCancel}
       />
 
       {/* Modal */}
-      <div className="relative bg-card border border-border rounded-xl p-6 shadow-lg w-full max-w-md animate-scale-in">
+      <div className="relative bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-xl p-6 shadow-sm hover:shadow-md w-full max-w-md animate-scale-in transition-all ease-in-out duration-200">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-foreground">Edit Task</h2>
           <button
