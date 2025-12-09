@@ -61,7 +61,9 @@ export function TaskCard({ task, onEdit, onDelete, isDragOverlay }: TaskCardProp
       </button>
 
       <div className="ml-6">
-        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{task.title}</h3>
+          <h3 title={task.title} className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+            <span className="block truncate max-w-full">{task.title}</span>
+          </h3>
         {task.description && (
           <p className="line-clamp-1 text-gray-500 dark:text-gray-300 text-xs mt-1">{task.description}</p>
         )}
