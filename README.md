@@ -1,6 +1,6 @@
-# Kanban Task Board
+# Kanbo
 
-A beautiful, responsive Kanban-style task management board built with React, TypeScript, and Tailwind CSS.
+Kanbo — a beautiful, responsive Kanban-style task management board built with React, TypeScript, and Tailwind CSS.
 
 ## ✨ Features
 
